@@ -11,13 +11,13 @@
     <div class="logo">damascino</div>
     <nav class="navbar">
         <ul>
-          <li><a href="index.html">Accueil</a></li>
+          <li><a href="index.php">Accueil</a></li>
           <li><a href="menu.php">Menu</a></li>
-          <li><a href="about.html">À propos</a></li>
+          <li><a href="about.php">À propos</a></li>
           <li><a href="contact.php">Contact</a></li>
           <li><a href="reservation.php">Réservation</a></li>
-          <li><a href="discount.html">Offres</a></li>
-          <li><a href="login.html"  class="Connexion">Connexion</a></li>
+          <li><a href="discount.php">Offres</a></li>
+          <li><a href="login.php"  class="Connexion">Connexion</a></li>
         </ul>
     </nav>
 </header>

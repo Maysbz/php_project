@@ -11,13 +11,13 @@
     <div class="logo">damascino</div>
     <nav class="navbar">
         <ul>
-          <li><a href="index.html">Accueil</a></li>
+          <li><a href="index.php">Accueil</a></li>
           <li><a href="menu.php">Menu</a></li>
-          <li><a href="about.html">À propos</a></li>
+          <li><a href="about.php">À propos</a></li>
           <li><a href="contact.php">Contact</a></li>
           <li><a href="reservation.php">Réservation</a></li>
-          <li><a href="discount.html">Offres</a></li>
-          <li><a href="login.html"  class="Connexion">Connexion</a></li>
+          <li><a href="discount.php">Offres</a></li>
+          <li><a href="login.php"  class="Connexion">Connexion</a></li>
         </ul>
     </nav>
 </header>
@@ -33,7 +33,7 @@
         <h3 class="discount-name">Kebab mixte</h3>
         <p class="discount-details">Obtenez 20% de réduction sur notre Kebab mixte !</p>
         <p class="discount-price"><del>80DT</del> 64DT</p>
-        <a href="signup.html" class="btn-redeem">Profiter de l'offre</a>
+        <a href="signup.php" class="btn-redeem">Profiter de l'offre</a>
       </div>
 
       <!-- Offre 2 -->
@@ -42,7 +42,7 @@
         <h3 class="discount-name">Mandi poulet</h3>
         <p class="discount-details">Une réduction de 15% sur  notre Mandi poulet !</p>
         <p class="discount-price"><del>40DT</del> 34DT</p>
-        <a href="signup.html" class="btn-redeem">Profiter de l'offre</a>
+        <a href="signup.php" class="btn-redeem">Profiter de l'offre</a>
       </div>
 
       <!-- Offre 3 -->
@@ -51,7 +51,7 @@
         <h3 class="discount-name">Kunefa</h3>
         <p class="discount-details">Réduction de 10% sur notre délicieuse kunefa !</p>
         <p class="discount-price"><del>30DT</del> 27DT</p>
-        <a href="signup.html" class="btn-redeem">Profiter de l'offre</a>
+        <a href="signup.php" class="btn-redeem">Profiter de l'offre</a>
       </div>
     </div>
   </section>

@@ -1,3 +1,47 @@
+<?php
+include 'db.php';
+
+$message_success = '';
+$message_error = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Récupérer et valider les données
+    $nom = trim($_POST['name'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $message = trim($_POST['message'] ?? '');
+    
+    // Validation
+    $errors = [];
+    if (empty($nom) || strlen($nom) < 2) {
+        $errors[] = "Le nom doit contenir au moins 2 caractères.";
+    }
+    if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = "L'adresse email n'est pas valide.";
+    }
+    if (empty($message) || strlen($message) < 10) {
+        $errors[] = "Le message doit contenir au moins 10 caractères.";
+    }
+    
+    // Si pas d'erreur, insérer dans la BDD
+    if (empty($errors)) {
+        $nom_escaped = mysqli_real_escape_string($conn, $nom);
+        $email_escaped = mysqli_real_escape_string($conn, $email);
+        $message_escaped = mysqli_real_escape_string($conn, $message);
+        
+        $insert_query = "INSERT INTO contact (nom, email, message) VALUES ('$nom_escaped', '$email_escaped', '$message_escaped')";
+        
+        if (mysqli_query($conn, $insert_query)) {
+            $message_success = "Merci ! Votre message a été envoyé avec succès. Nous vous répondrons bientôt.";
+            // Réinitialiser le formulaire
+            $nom = $email = $message = '';
+        } else {
+            $message_error = "Une erreur s'est produite. Veuillez réessayer.";
+        }
+    } else {
+        $message_error = implode("<br>", $errors);
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,7 +69,18 @@
   <section class="contact-section">
     <h1 class="contact-title">Contactez-nous</h1>
     <p class="contact-description">Pour toute question ou réservation, contactez-nous ou visitez notre restaurant à l'adresse ci-dessous.</p>
-    <!-- info-section-->
+    
+    <?php if ($message_success): ?>
+      <div class="alert alert-success" style="background-color: #d4edda; color: #155724; padding: 12px; border-radius: 4px; margin: 20px 0;">
+        <?php echo $message_success; ?>
+      </div>
+    <?php endif; ?>
+    
+    <?php if ($message_error): ?>
+      <div class="alert alert-error" style="background-color: #f8d7da; color: #721c24; padding: 12px; border-radius: 4px; margin: 20px 0;">
+        <?php echo $message_error; ?>
+      </div>
+    <?php endif; ?>
 
     <div class="container">
       <div class="info-section">
@@ -39,17 +94,20 @@
         <!-- contact form-->
       <div class="form-section">
           <h2>Contactez-nous </h2>
-          <form>
-              <label for="name">Name:</label>
-              <input type="text" id="name" name="name" placeholder="Your name" required>
+          <form method="POST" action="contact.php" id="contactForm">
+              <label for="name">Nom:</label>
+              <input type="text" id="name" name="name" placeholder="Votre nom" required value="<?php echo htmlspecialchars($nom ?? ''); ?>">
+              <span class="error-message" id="nameError"></span>
 
               <label for="email">E-Mail:</label>
-              <input type="email" id="email" name="email" placeholder="Your email" required>
+              <input type="email" id="email" name="email" placeholder="Votre email" required value="<?php echo htmlspecialchars($email ?? ''); ?>">
+              <span class="error-message" id="emailError"></span>
 
               <label for="message">Message:</label>
-              <textarea id="message" name="message" placeholder="Your message" required></textarea>
+              <textarea id="message" name="message" placeholder="Votre message" required><?php echo htmlspecialchars($message ?? ''); ?></textarea>
+              <span class="error-message" id="messageError"></span>
 
-              <button type="submit">Send</button>
+              <button type="submit">Envoyer</button>
           </form>
       </div>
   </div>
@@ -109,5 +167,41 @@
       <p>&copy; 2023 damascino. Tous droits réservés.</p>
     </div>
   </footer>
+
+  <script>
+    // Validation du formulaire contact
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      let isValid = true;
+      
+      // Réinitialiser les erreurs
+      document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+      
+      // Valider le nom
+      const name = document.getElementById('name').value.trim();
+      if (name.length < 2) {
+        document.getElementById('nameError').textContent = 'Le nom doit contenir au moins 2 caractères.';
+        isValid = false;
+      }
+      
+      // Valider l'email
+      const email = document.getElementById('email').value.trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        document.getElementById('emailError').textContent = 'Veuillez entrer une adresse email valide.';
+        isValid = false;
+      }
+      
+      // Valider le message
+      const message = document.getElementById('message').value.trim();
+      if (message.length < 10) {
+        document.getElementById('messageError').textContent = 'Le message doit contenir au moins 10 caractères.';
+        isValid = false;
+      }
+      
+      if (!isValid) {
+        e.preventDefault();
+      }
+    });
+  </script>
 </body>
 </html>

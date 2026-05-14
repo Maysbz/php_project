@@ -1,3 +1,14 @@
+<?php
+include 'db.php';
+
+// Récupérer les catégories disponibles
+$categories_query = "SELECT DISTINCT categorie FROM plat WHERE actif = 1 ORDER BY categorie";
+$categories_result = mysqli_query($conn, $categories_query);
+$categories = [];
+while ($row = mysqli_fetch_assoc($categories_result)) {
+    $categories[] = $row['categorie'];
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,129 +36,74 @@
 <section class="menu-section">
   <h1 class="menu-title">Notre Menu</h1>
 
-  <!-- Entrées -->
-  <div class="menu-category">
-    <h2>Entrées</h2>
-    <ul class="menu-items">
-      <li class="menu-item">
-        <img src="images/soupe.jpg" alt="Soupe aux lentilles">
-        <div class="item-details">
-          <h3>Soupe aux lentilles</h3>
-          <p>Prix : 15 TND</p>
-          <a href="commande.php" class="order-btn">Commander</a>   
-        </div>
-      </li>
-      <li class="menu-item">
-        <img src="images/Fattouch.jpg" alt="Fattouch">
-        <div class="item-details">
-          <h3>Fattouch</h3>
-          <p>Prix : 10 TND</p>
-          <a href="commande.php" class="order-btn">Commander</a>   
-        </div>
-      </li>
-      <li class="menu-item">
-        <img src="images/maza.jpg" alt="Maza">
-        <div class="item-details">
-          <h3>Maza</h3>
-          <p>Prix : 20 TND</p>
-          <a href="commande.php" class="order-btn">Commander</a>   
-        </div>
-      </li>
-    </ul>
-  </div>
+  <?php foreach ($categories as $categorie): ?>
+    <?php
+      $plats_query = "SELECT * FROM plat WHERE categorie = '" . mysqli_real_escape_string($conn, $categorie) . "' AND actif = 1";
+      $plats_result = mysqli_query($conn, $plats_query);
+    ?>
+    <div class="menu-category">
+      <h2><?php echo htmlspecialchars($categorie); ?></h2>
+      <ul class="menu-items">
+        <?php while ($plat = mysqli_fetch_assoc($plats_result)): ?>
+          <li class="menu-item">
+            <img src="<?php echo htmlspecialchars($plat['image']); ?>" alt="<?php echo htmlspecialchars($plat['nom']); ?>">
+            <div class="item-details">
+              <h3><?php echo htmlspecialchars($plat['nom']); ?></h3>
+              <?php if ($plat['description']): ?>
+                <p class="item-description"><?php echo htmlspecialchars($plat['description']); ?></p>
+              <?php endif; ?>
+              <p class="item-price">Prix : <?php echo number_format($plat['prix'], 2); ?> TND</p>
+              <a href="commande.php?plat_id=<?php echo $plat['id']; ?>" class="order-btn">Commander</a>   
+            </div>
+          </li>
+        <?php endwhile; ?>
+      </ul>
+    </div>
+  <?php endforeach; ?>
 
-  <!-- Plats principaux -->
-  <div class="menu-category">
-    <h2>Plats principaux</h2>
-    <ul class="menu-items">
-      <li class="menu-item">
-        <img src="images/kebabmix.jpg" alt="Kebab mixte">
-        <div class="item-details">
-          <h3>Kebab mixte</h3>
-          <p>Prix : 80 TND</p>
-          <a href="commande.php" class="order-btn">Commander</a>   
-        </div>
-      </li>
-      <li class="menu-item">
-        <img src="images/majouka.jpg" alt="Majouka">
-        <div class="item-details">
-          <h3>Majouka</h3>
-          <p>Prix : 30 TND</p>
-          <a href="commande.php" class="order-btn">Commander</a>   
-        </div>
-      </li>
-      <li class="menu-item">
-        <img src="images/mandi.png" alt="Mandi poulet">
-        <div class="item-details">
-          <h3>Mandi poulet</h3>
-          <p>Prix : 40 TND</p>
-          <a href="commande.php" class="order-btn">Commander</a>   
-        </div>
-      </li>
-    </ul>
-  </div>
+</section>
 
-  <!-- Desserts -->
-  <div class="menu-category">
-    <h2>Desserts</h2>
-    <ul class="menu-items">
-      <li class="menu-item">
-        <img src="images/tiramisu.jpg" alt="Tiramisu">
-        <div class="item-details">
-          <h3>Tiramisu</h3>
-          <p>Prix : 10 TND</p>
-          <a href="commande.php" class="order-btn">Commander</a>   
+<!-- footer -->
+  <footer class="main-footer">
+    <div class="footer-container">
+      <!-- About Us Section -->
+      <div class="footer-section about">
+        <h3>À propos de nous</h3>
+        <p>Damascino vous invite à un voyage culinaire au cœur de la Syrie, où l'authenticité des saveurs levantines rencontre la générosité d'un accueil chaleureux.</p>
+      </div>
+  
+      <!-- Contact Section -->
+      <div class="footer-section contact">
+        <h3>Contactez-nous</h3>
+        <p><strong>Adresse :</strong> Rue de la Feuille d'Érable, Tunis 1053</p>
+        <p><strong>Téléphone :</strong> +216 53 888 880</p>
+        <p><strong>Email :</strong> contact@damascino.tn</p>
+      </div>
+  
+      <!-- Hours Section -->
+      <div class="footer-section hours">
+        <h3>Horaires d'ouverture</h3>
+        <ul>
+          <li>Lundi - Vendredi : 11h - 23h</li>
+          <li>Samedi - Dimanche : 11h - 00h</li>
+        </ul>
+      </div>
+  
+      <!-- Social Media Section -->
+      <div class="footer-section social">
+        <h3>Suivez-nous</h3>
+        <div class="social-icons">
+          <a href="https://www.facebook.com/damascino.orientalfood" class="social-icon"><img src="images/facebook.png" alt="Facebook"></a>
+          <a href="https://www.instagram.com/damascino.orientalfood/" class="social-icon"><img src="images/insta.png" alt="Instagram"></a>
         </div>
-      </li>
-      <li class="menu-item">
-        <img src="images/kunefa.jpg" alt="Kunefa">
-        <div class="item-details">
-          <h3>Kunefa</h3>
-          <p>Prix : 30 TND</p>
-          <a href="commande.php" class="order-btn">Commander</a>   
-        </div>
-      </li>
-      <li class="menu-item">
-        <img src="images/layalilibnan.jpg" alt="Layali lebnan">
-        <div class="item-details">
-          <h3>Layali lebnan</h3>
-          <p>Prix : 15 TND</p>
-          <a href="commande.php" class="order-btn">Commander</a>   
-        </div>
-      </li>
-    </ul>
-  </div>
-
-  <!-- Boissons -->
-  <div class="menu-category">
-    <h2>Boissons</h2>
-    <ul class="menu-items">
-      <li class="menu-item">
-        <img src="images/citronade.jpeg" alt="Citronnade">
-        <div class="item-details">
-          <h3>Citronnade</h3>
-          <p>Prix : 9 TND</p>
-          <a href="commande.php" class="order-btn">Commander</a>   
-        </div>
-      </li>
-      <li class="menu-item">
-        <img src="images/Thé_à_la_Menthe.jpg" alt="Thé à la Menthe">
-        <div class="item-details">
-          <h3>Thé à la Menthe</h3>
-          <p>Prix : 12 TND</p>
-          <a href="commande.php" class="order-btn">Commander</a>
-        </div>
-      </li>
-      <li class="menu-item">
-        <img src="images/ayran.jpg" alt="Ayrane">
-        <div class="item-details">
-          <h3>Ayrane</h3>
-          <p>Prix : 10 TND</p>
-          <a href="commande.php" class="order-btn">Commander</a>     
-         </div>
-      </li>
-    </ul>
-  </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2023 damascino. Tous droits réservés.</p>
+    </div>
+  </footer>
+</body>
+</html>
 </section>
 <!-- Section Nos Spécialités -->
 <section class="specialties-section">

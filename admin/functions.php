@@ -1,5 +1,7 @@
 <?php
-include '../db.php';
+require_once __DIR__ . '/../config/database.php';
+
+$conn = db_mysqli();
 
 // ===== PLATS =====
 function get_all_plats() {
@@ -68,9 +70,25 @@ function update_reservation_status($id, $status) {
 // ===== COMMANDES =====
 function get_all_commandes() {
     global $conn;
-    // Si la table commande existe
     if (check_table_exists('commande')) {
         $query = "SELECT * FROM commande ORDER BY date_creation DESC";
+        return mysqli_query($conn, $query);
+    }
+    return false;
+}
+
+function update_commande_status($id, $status) {
+    global $conn;
+    $id = intval($id);
+    $status = mysqli_real_escape_string($conn, $status);
+    $query = "UPDATE commande SET status='$status' WHERE id=$id";
+    return mysqli_query($conn, $query);
+}
+
+function get_all_users() {
+    global $conn;
+    if (check_table_exists('users')) {
+        $query = "SELECT id, username, email, phone, role, date_creation FROM users ORDER BY date_creation DESC";
         return mysqli_query($conn, $query);
     }
     return false;
@@ -150,6 +168,13 @@ function get_stats() {
     // Total offres actives
     $result = mysqli_query($conn, "SELECT COUNT(*) as total FROM offre WHERE actif=1");
     $stats['offres_actives'] = mysqli_fetch_assoc($result)['total'];
+
+    // Total commandes
+    $stats['commandes_total'] = 0;
+    if (check_table_exists('commande')) {
+        $result = mysqli_query($conn, "SELECT COUNT(*) as total FROM commande");
+        $stats['commandes_total'] = mysqli_fetch_assoc($result)['total'];
+    }
     
     return $stats;
 }
@@ -161,7 +186,10 @@ function check_table_exists($table_name) {
     return mysqli_num_rows($result) > 0;
 }
 
-function upload_image($file, $upload_dir = '../images/') {
+function upload_image($file, $upload_dir = null) {
+    if ($upload_dir === null) {
+        $upload_dir = __DIR__ . '/../images/';
+    }
     $allowed_ext = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
     $file_ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
     

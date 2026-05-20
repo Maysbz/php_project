@@ -1,6 +1,6 @@
 <?php
-include 'auth.php';
-include 'functions.php';
+include '../auth.php';
+include '../functions.php';
 
 $message = '';
 $error = '';
@@ -98,7 +98,7 @@ if (isset($_GET['edit'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion Produits - Admin</title>
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="<?php echo e(versioned_asset_href('../../style.css')); ?>">
     <style>
         .admin-container { max-width: 1200px; margin: 0 auto; padding: 20px; }
         .admin-navbar { background-color: #333; padding: 0; margin-bottom: 20px; }
@@ -183,7 +183,7 @@ if (isset($_GET['edit'])) {
                     <input type="file" id="image" name="image" accept="image/*">
                     <?php if ($edit_plat && $edit_plat['image']): ?>
                         <p>Image actuelle:</p>
-                        <img src="../<?php echo htmlspecialchars($edit_plat['image']); ?>" class="plat-image">
+                        <img src="<?php echo e(asset_url($edit_plat['image'])); ?>" class="plat-image">
                     <?php endif; ?>
                     <img id="imagePreview" class="image-preview" style="display:none;">
                 </div>
@@ -214,7 +214,7 @@ if (isset($_GET['edit'])) {
                     <?php while ($plat = mysqli_fetch_assoc($plats)): ?>
                         <tr>
                             <td>
-                                <img src="../<?php echo htmlspecialchars($plat['image']); ?>" class="plat-image" alt="<?php echo htmlspecialchars($plat['nom']); ?>">
+                                <img src="<?php echo e(asset_url($plat['image'])); ?>" class="plat-image" alt="<?php echo htmlspecialchars($plat['nom']); ?>">
                             </td>
                             <td><?php echo htmlspecialchars($plat['nom']); ?></td>
                             <td><?php echo htmlspecialchars($plat['categorie']); ?></td>

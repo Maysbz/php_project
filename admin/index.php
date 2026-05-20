@@ -10,7 +10,7 @@ $stats = get_stats();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Damascino</title>
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="<?php echo e(versioned_asset_href('../style.css')); ?>">
     <style>
         .admin-container {
             max-width: 1200px;
@@ -114,15 +114,20 @@ $stats = get_stats();
                 <h3>Offres Actives</h3>
                 <div class="number"><?php echo $stats['offres_actives']; ?></div>
             </div>
+            <div class="stat-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                <h3>Commandes</h3>
+                <div class="number"><?php echo $stats['commandes_total']; ?></div>
+            </div>
         </div>
 
         <div class="admin-section">
             <h2>Accès rapide</h2>
             <ul>
-                <li><a href="produits.php">Gérer les plats</a></li>
-                <li><a href="commandes.php">Voir les commandes</a></li>
-                <li><a href="reservations.php">Gérer les réservations</a></li>
-                <li><a href="clients.php">Voir les clients</a></li>
+                <li><a href="<?php echo e(admin_url('manage/produits.php')); ?>">Gérer les plats</a></li>
+                <li><a href="<?php echo e(admin_url('manage/commandes.php')); ?>">Voir les commandes</a></li>
+                <li><a href="<?php echo e(admin_url('manage/reservations.php')); ?>">Gérer les réservations</a></li>
+                <li><a href="<?php echo e(admin_url('manage/clients.php')); ?>">Voir les clients</a></li>
+                <li><a href="<?php echo e(admin_url('manage/offres.php')); ?>">Gérer les offres</a></li>
             </ul>
         </div>
     </div>

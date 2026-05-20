@@ -1,6 +1,6 @@
 <?php
-include 'auth.php';
-include 'functions.php';
+include '../auth.php';
+include '../functions.php';
 
 $message = '';
 
@@ -25,7 +25,7 @@ $reservations = get_all_reservations();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion Réservations - Admin</title>
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="<?php echo e(versioned_asset_href('../../style.css')); ?>">
     <style>
         .admin-container { max-width: 1200px; margin: 0 auto; padding: 20px; }
         .admin-navbar { background-color: #333; padding: 0; margin-bottom: 20px; }

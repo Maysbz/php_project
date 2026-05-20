@@ -1,40 +1,18 @@
 <?php
-session_start();
+require_once __DIR__ . '/init.php';
+require_user();
+$selectedPlatId = (int) ($_GET['plat_id'] ?? 0);
 
-// Rediriger vers login si non connecté
-if (!isset($_SESSION['user'])) {
-    header("Location: login.php");
-    exit();
-}
+ensure_session();
+render_page_head('Commande');
+render_header('commande.php');
 ?>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Restaurant - Commande</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <header class="main-header">
-    <div class="logo">damascino</div>
-    <nav class="navbar">
-      <ul>
-        <li><a href="index.php">Accueil</a></li>
-        <li><a href="menu.php">Menu</a></li>
-        <li><a href="about.php">À propos</a></li>
-        <li><a href="contact.php">Contact</a></li>
-        <li><a href="reservation.php">Réservation</a></li>
-        <li><a href="discount.php">Offres</a></li>
-        <li><a href="logout.php" class="Connexion">Déconnexion</a></li>
-      </ul>
-    </nav>
-  </header>
 
   <section class="order-section">
+    <div class="page-intro">
     <h1 class="order-title">Passer une commande</h1>
-    <p class="order-description">Remplissez le formulaire ci-dessous pour commander vos plats préférés. Nous préparerons votre commande dès que possible !</p>
-
+    <p class="order-description">Choisissez vos plats et validez votre commande.</p>
+    </div>
     <div class="order-form-container">
       <form class="order-form" action="facture.php" method="POST">
 
@@ -60,60 +38,60 @@ if (!isset($_SESSION['user'])) {
           <!-- Entrées -->
           <h3 style="margin-top:15px; color:#8B0000;">🥗 Entrées</h3>
           <div class="menu-item">
-            <input type="checkbox" id="dish1" name="plats[]" value="Soupe aux lentilles|15">
+            <input type="checkbox" id="dish1" name="plats[]" value="Soupe aux lentilles|15" <?php echo $selectedPlatId === 1 ? 'checked' : ''; ?>>
             <label for="dish1">Soupe aux lentilles — 15 TND</label>
           </div>
           <div class="menu-item">
-            <input type="checkbox" id="dish2" name="plats[]" value="Fattouch|10">
+            <input type="checkbox" id="dish2" name="plats[]" value="Fattouch|10" <?php echo $selectedPlatId === 2 ? 'checked' : ''; ?>>
             <label for="dish2">Fattouch — 10 TND</label>
           </div>
           <div class="menu-item">
-            <input type="checkbox" id="dish3" name="plats[]" value="Maza|20">
+            <input type="checkbox" id="dish3" name="plats[]" value="Maza|20" <?php echo $selectedPlatId === 3 ? 'checked' : ''; ?>>
             <label for="dish3">Maza — 20 TND</label>
           </div>
 
           <!-- Plats principaux -->
           <h3 style="margin-top:15px; color:#8B0000;">🍖 Plats principaux</h3>
           <div class="menu-item">
-            <input type="checkbox" id="dish4" name="plats[]" value="Kebab mixte|80">
+            <input type="checkbox" id="dish4" name="plats[]" value="Kebab mixte|80" <?php echo $selectedPlatId === 4 ? 'checked' : ''; ?>>
             <label for="dish4">Kebab mixte — 80 TND</label>
           </div>
           <div class="menu-item">
-            <input type="checkbox" id="dish5" name="plats[]" value="Mandi poulet|40">
+            <input type="checkbox" id="dish5" name="plats[]" value="Mandi poulet|40" <?php echo $selectedPlatId === 5 ? 'checked' : ''; ?>>
             <label for="dish5">Mandi poulet — 40 TND</label>
           </div>
           <div class="menu-item">
-            <input type="checkbox" id="dish6" name="plats[]" value="Majouka|30">
+            <input type="checkbox" id="dish6" name="plats[]" value="Majouka|30" <?php echo $selectedPlatId === 6 ? 'checked' : ''; ?>>
             <label for="dish6">Majouka — 30 TND</label>
           </div>
 
           <!-- Desserts -->
           <h3 style="margin-top:15px; color:#8B0000;">🍮 Desserts</h3>
           <div class="menu-item">
-            <input type="checkbox" id="dish7" name="plats[]" value="Tiramisu|10">
+            <input type="checkbox" id="dish7" name="plats[]" value="Tiramisu|10" <?php echo $selectedPlatId === 7 ? 'checked' : ''; ?>>
             <label for="dish7">Tiramisu — 10 TND</label>
           </div>
           <div class="menu-item">
-            <input type="checkbox" id="dish8" name="plats[]" value="Kunefa|30">
+            <input type="checkbox" id="dish8" name="plats[]" value="Kunefa|30" <?php echo $selectedPlatId === 8 ? 'checked' : ''; ?>>
             <label for="dish8">Kunefa — 30 TND</label>
           </div>
           <div class="menu-item">
-            <input type="checkbox" id="dish9" name="plats[]" value="Layali lebnan|15">
+            <input type="checkbox" id="dish9" name="plats[]" value="Layali lebnan|15" <?php echo $selectedPlatId === 9 ? 'checked' : ''; ?>>
             <label for="dish9">Layali lebnan — 15 TND</label>
           </div>
 
           <!-- Boissons -->
           <h3 style="margin-top:15px; color:#8B0000;">🥤 Boissons</h3>
           <div class="menu-item">
-            <input type="checkbox" id="dish10" name="plats[]" value="Citronnade|9">
+            <input type="checkbox" id="dish10" name="plats[]" value="Citronnade|9" <?php echo $selectedPlatId === 10 ? 'checked' : ''; ?>>
             <label for="dish10">Citronnade — 9 TND</label>
           </div>
           <div class="menu-item">
-            <input type="checkbox" id="dish11" name="plats[]" value="Thé à la Menthe|12">
+            <input type="checkbox" id="dish11" name="plats[]" value="Thé à la Menthe|12" <?php echo $selectedPlatId === 11 ? 'checked' : ''; ?>>
             <label for="dish11">Thé à la Menthe — 12 TND</label>
           </div>
           <div class="menu-item">
-            <input type="checkbox" id="dish12" name="plats[]" value="Ayrane|10">
+            <input type="checkbox" id="dish12" name="plats[]" value="Ayrane|10" <?php echo $selectedPlatId === 12 ? 'checked' : ''; ?>>
             <label for="dish12">Ayrane — 10 TND</label>
           </div>
 
@@ -150,57 +128,28 @@ if (!isset($_SESSION['user'])) {
       </form>
     </div>
   </section>
-
-  <footer class="main-footer">
-    <div class="footer-container">
-      <div class="footer-section about">
-        <h3>À propos de nous</h3>
-        <p>Damascino vous invite à un voyage culinaire au cœur de la Syrie, où l'authenticité des saveurs levantines rencontre la générosité d'un accueil chaleureux.</p>
-      </div>
-      <div class="footer-section contact">
-        <h3>Contactez-nous</h3>
-        <p><strong>Adresse :</strong> Rue de la Feuille d'Érable, Tunis 1053</p>
-        <p><strong>Téléphone :</strong> +216 53 888 880</p>
-        <p><strong>Email :</strong> contact@damascino.tn</p>
-      </div>
-      <div class="footer-section hours">
-        <h3>Horaires d'ouverture</h3>
-        <ul>
-          <li>Lundi - Vendredi : 11h - 23h</li>
-          <li>Samedi - Dimanche : 11h - 00h</li>
-        </ul>
-      </div>
-      <div class="footer-section social">
-        <h3>Suivez-nous</h3>
-        <div class="social-icons">
-          <a href="https://www.facebook.com/damascino.orientalfood" class="social-icon"><img src="images/facebook.png" alt="Facebook"></a>
-          <a href="https://www.instagram.com/damascino.orientalfood/" class="social-icon"><img src="images/insta.png" alt="Instagram"></a>
-        </div>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>&copy; 2023 damascino. Tous droits réservés.</p>
-    </div>
-  </footer>
-
-  <!-- JavaScript : calcul du total en temps réel + validation -->
+<?php render_footer(); ?>
+<!-- JavaScript : calcul du total en temps réel + validation -->
   <script>
     // Calcul du total en temps réel
     const checkboxes = document.querySelectorAll('input[name="plats[]"]');
     const totalSpan  = document.getElementById('total');
 
-    checkboxes.forEach(cb => {
-      cb.addEventListener('change', () => {
-        let total = 0;
-        checkboxes.forEach(c => {
-          if (c.checked) {
-            const prix = parseInt(c.value.split('|')[1]);
-            total += prix;
-          }
-        });
-        totalSpan.textContent = total;
+    function updateTotal() {
+      let total = 0;
+      checkboxes.forEach(c => {
+        if (c.checked) {
+          total += parseInt(c.value.split('|')[1], 10);
+        }
       });
+      totalSpan.textContent = total;
+    }
+
+    checkboxes.forEach(cb => {
+      cb.addEventListener('change', updateTotal);
     });
+
+    updateTotal();
 
     // Validation : vérifier qu'un plat est coché avant d'envoyer
     document.querySelector('.order-form').addEventListener('submit', function(e) {
